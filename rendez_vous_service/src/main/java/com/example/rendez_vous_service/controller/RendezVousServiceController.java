@@ -5,6 +5,7 @@ import com.example.rendez_vous_service.service.RendezVousService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @RestController
@@ -31,12 +32,14 @@ public class RendezVousServiceController {
     }
 
     @DeleteMapping("/deleteRendezVous")
-    public String deleteRendezVous() {
+    public String deleteRendezVous(@RequestBody int id) {
+        rendezVousService.deleteRendezVousById(id);
         return "RendezVous deleted";
     }
 
     @PutMapping("/updateRendezVous")
-    public String updateRendezVous() {
+    public String updateRendezVous(@RequestBody int id, Date date) {
+        rendezVousService.updateRendezVous(id, date);
         return "RendezVous updated";
     }
 }
