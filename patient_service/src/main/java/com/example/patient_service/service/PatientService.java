@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class PatientService {
 
-    public static List<Patient> getAllPatients() {
+    public List<Patient> getAllPatients() {
         String selectSQL = "SELECT * FROM patient";
         List<Patient> patients = new ArrayList<>();
 
@@ -36,7 +36,7 @@ public class PatientService {
         return patients;
     }
 
-    public static Patient getPatientById(int id) {
+    public Patient getPatientById(int id) {
         String selectSQL = "SELECT * FROM patient WHERE id = ?";
         Patient patient = null;
 
@@ -47,7 +47,7 @@ public class PatientService {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                String fullName = rs.getString("full_name");
+                String fullName = rs.getString("nom");
                 int age = rs.getInt("age");
                 patient = new Patient(id, fullName, age);
             }
@@ -57,12 +57,11 @@ public class PatientService {
         return patient;
     }
 
-    public static void addPatient(String fullName, int age) {
+    public void addPatient(String fullName, int age) {
         String insertSQL = "INSERT INTO patient (nom, age) VALUES (?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
-            System.out.println("fullName: " + fullName);
             pstmt.setString(1, fullName);
             pstmt.setInt(2, age);
             pstmt.executeUpdate();
@@ -71,7 +70,7 @@ public class PatientService {
         }
     }
 
-    public static void deletePatientById(int id) {
+    public void deletePatientById(int id) {
         String deleteSQL = "DELETE FROM patient WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
@@ -84,7 +83,7 @@ public class PatientService {
         }
     }
 
-    public static void updatePatient(Patient patient) {
+    public void updatePatient(Patient patient) {
         String updateSQL = "UPDATE patient SET nom = ?, age = ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();

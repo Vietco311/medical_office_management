@@ -1,11 +1,11 @@
 package com.example.praticien_service.model;
 
-public class Patricien {
+public class Practicien {
     private int id;
     private String name;
     private String speciality;
 
-    public Patricien(int id, String name, String speciality) {
+    public Practicien(int id, String name, String speciality) {
         this.id = id;
         this.name = name;
         this.speciality = speciality;
