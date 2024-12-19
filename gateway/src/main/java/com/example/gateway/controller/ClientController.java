@@ -1,5 +1,6 @@
 package com.example.gateway.controller;
 
+import com.example.gateway.model.DossierMedical;
 import com.example.gateway.model.RendezVous;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -54,6 +55,44 @@ public class ClientController {
         System.out.println("Response Body " + response);
 
         return "Employee Id -  " + idPracticien + " [ Employee Details " + response + " ]";
+    }
+
+    @RequestMapping(value = "/processRendezVous", method = RequestMethod.POST)
+    public String processRendezVous(@RequestBody DossierMedical dossierMedical) {
+
+        HttpEntity<DossierMedical> entity = new HttpEntity<>(dossierMedical);
+        String response = this.restTemplate.exchange("http://praticien_service/processRendezVous",
+                HttpMethod.POST, entity, String.class).getBody();
+
+        System.out.println("Response Body " + response);
+
+        return "Dossier médical mis à jour avec succès !";
+    }
+
+    @RequestMapping(value = "/getDossier/{idPatient}", method = RequestMethod.GET)
+    public String getDossier(@PathVariable int idPatient) {
+        System.out.println("Getting Dossier details for " + idPatient);
+
+        String response = this.restTemplate.exchange("http://dossier_medical/getDossier/{idPatient}",
+                HttpMethod.GET, null, new ParameterizedTypeReference<String>() {
+                }, idPatient).getBody();
+
+        System.out.println("Response Body " + response);
+
+        return "Dossier Id -  " + idPatient + " [ Dossier Details " + response + " ]";
+    }
+
+    @RequestMapping(value = "/getRendezVous/{id", method = RequestMethod.GET)
+    public String getRendezVous(@PathVariable int id) {
+        System.out.println("Getting RendezVous details for " + id);
+
+        String response = this.restTemplate.exchange("http://rendez_vous_service/getRendezVous/{id}",
+                HttpMethod.GET, null, new ParameterizedTypeReference<String>() {
+                }, id).getBody();
+
+        System.out.println("Response Body " + response);
+
+        return "RendezVous Id -  " + id + " [ RendezVous Details " + response + " ]";
     }
 
 
