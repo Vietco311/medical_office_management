@@ -1,12 +1,14 @@
 package com.example.rendez_vous_service.model;
 
+import java.sql.Date;
+
 public class RendezVous {
     private int id;
     private int idPatient;
     private int idPraticien;
-    private String date;
+    private Date date;
 
-    public RendezVous(int id, int idPatient, int idPraticien, String date) {
+    public RendezVous(int id, int idPatient, int idPraticien, Date date) {
         this.id = id;
         this.idPatient = idPatient;
         this.idPraticien = idPraticien;
@@ -25,7 +27,7 @@ public class RendezVous {
         return idPraticien;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
@@ -37,7 +39,7 @@ public class RendezVous {
         this.idPraticien = idPraticien;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }
