@@ -1,11 +1,14 @@
 package com.example.praticien_service.controller;
 
+import com.example.praticien_service.model.DossierMedical;
 import com.example.praticien_service.model.Practicien;
 import com.example.praticien_service.service.PracticienService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/practicien")
@@ -13,6 +16,7 @@ public class PracticienServiceController {
 
     @Autowired
     private PracticienService praticienService;
+
 
     // Route pour obtenir tous les praticiens
     @GetMapping("/getAllPracticien")
@@ -50,5 +54,10 @@ public class PracticienServiceController {
     public String updatePraticien(@RequestBody int id, String name) {
         praticienService.updatePraticien(id, name);
         return "Practicien mis à jour avec succès !";
+    }
+
+    @PostMapping("/processRendezVous")
+    public String processRendezVous(@RequestBody DossierMedical dossierMedical) {
+        return praticienService.processRendezVous(dossierMedical.getIdPatient(), dossierMedical.getTraitement(), dossierMedical.getDiagnostic());
     }
 }

@@ -5,6 +5,8 @@ import com.example.dossier_medical.service.DossierMedicalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
+import java.awt.*;
 import java.util.List;
 
 @RestController
@@ -17,10 +19,12 @@ public class DossierServiceController {
         @GetMapping("/getAllDossier")
         public List<DossierMedical> getAllDossier() {
             return dossierService.getAllDossiers();
+
         }
 
         @GetMapping("/getDossier/{idPatient}")
         public DossierMedical getDossier(@PathVariable int idPatient) {
+            System.out.println("idPatient: " + idPatient);
             return dossierService.getDossierByIdPatient(idPatient);
         }
 

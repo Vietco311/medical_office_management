@@ -1,8 +1,16 @@
 package com.example.praticien_service.service;
 
 import com.example.praticien_service.databse.DatabaseConnection;
+import com.example.praticien_service.model.DossierMedical;
 import com.example.praticien_service.model.Practicien;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +20,13 @@ import java.util.List;
 
 @Service
 public class PracticienService {
+
+    private final RestTemplate restTemplate;
+
+    @Autowired
+    public PracticienService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     public List<Practicien> getAllPracticien() {
         List<Practicien> practicians = new ArrayList<>();
@@ -92,6 +107,33 @@ public class PracticienService {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Error updating praticien");
+        }
+    }
+
+    public String processRendezVous(int idPatient, String traitement, String diagnostic) {
+        String getUrl = "http://localhost:8083/dossier_medical/getDossier/" + idPatient;
+        String addUrl = "http://localhost:8083/dossier_medical/addDossier";
+        String updateUrl = "http://localhost:8083/dossier_medical/updateDossier";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> entity = new HttpEntity<>(headers);
+        // Vérifier si le dossier existe
+        ResponseEntity<DossierMedical> response = restTemplate.exchange(getUrl, HttpMethod.GET, entity, DossierMedical.class);
+        if (response.getBody() == null) {
+            // Si aucun dossier n'existe, créer un nouveau dossier
+            DossierMedical newDossier = new DossierMedical(idPatient, diagnostic, traitement);
+            HttpEntity<DossierMedical> addEntity = new HttpEntity<>(newDossier, headers);
+            restTemplate.exchange(addUrl, HttpMethod.POST, addEntity, String.class);
+            return "Dossier créé et rendez-vous ajouté avec succès !";
+        } else {
+            // Si un dossier existe, le mettre à jour
+            DossierMedical existingDossier = response.getBody();
+            existingDossier.setDiagnostic(diagnostic);
+            existingDossier.setTraitement(traitement);
+            HttpEntity<DossierMedical> updateEntity = new HttpEntity<>(existingDossier, headers);
+            restTemplate.exchange(updateUrl, HttpMethod.PUT, updateEntity, String.class);
+            return "Dossier mis à jour et rendez-vous ajouté avec succès !";
         }
     }
 }

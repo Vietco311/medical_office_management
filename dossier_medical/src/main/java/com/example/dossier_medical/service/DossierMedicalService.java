@@ -4,9 +4,7 @@ import com.example.dossier_medical.database.DatabaseConnection;
 import com.example.dossier_medical.model.DossierMedical;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +17,8 @@ public class DossierMedicalService {
         List<DossierMedical> dossier_medicals = new ArrayList<>();
 
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(selectSQL)) {
-
+             PreparedStatement statement = conn.prepareStatement(selectSQL);
+             ResultSet rs = statement.executeQuery()) {
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int idPatient = rs.getInt("idPatient");
@@ -39,12 +36,14 @@ public class DossierMedicalService {
 
     // Récupérer un dossier médical par son ID
     public DossierMedical getDossierByIdPatient(int idPatient) {
-        String selectSQL = "SELECT * FROM dossier_medical WHERE id = ?";
+        String selectSQL = "SELECT * FROM dossier_medical WHERE idPatient = ?";
         DossierMedical dossier_medical = null;
 
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(selectSQL)) {
+             PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
+
+            pstmt.setInt(1, idPatient);
+            ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
                 int id = rs.getInt("id");
@@ -52,7 +51,7 @@ public class DossierMedicalService {
                 String traitement = rs.getString("traitement");
                 dossier_medical = new DossierMedical(id, idPatient, traitement, diagnostic);
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return dossier_medical;
@@ -61,12 +60,14 @@ public class DossierMedicalService {
 
     // Ajouter un dossier médical
     public void addDossier(int idPatient, String diagnostic, String traitement) {
-        String insertSQL = "INSERT INTO dossier_medical (idPatient, diagnostique, traitement) VALUES (?, ?, ?)";
+        String insertSQL = "INSERT INTO dossier_medical(idPatient, diagnostique, traitement) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseConnection.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            stmt.executeUpdate(insertSQL);
+             PreparedStatement statement = conn.prepareStatement(insertSQL)) {
+            statement.setInt(1, idPatient);
+            statement.setString(2, diagnostic);
+            statement.setString(3, traitement);
+            statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }

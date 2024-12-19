@@ -1,0 +1,25 @@
+server:
+  port: 8010    # Port du Gateway
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/  # Eureka Server
+  instance:
+    leaseRenewalIntervalInSeconds: 5
+    leaseExpirationDurationInSeconds: 2
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    discovery:
+      enabled: true
+
+management:
+  security:
+    enabled: false
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
