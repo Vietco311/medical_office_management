@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class PraticienServiceController {
 
-    @GetMapping("/getPraticien")
+    @GetMapping("/getAllPraticien")
     public String getPraticien() {
         return "Praticien details";
     }
 
-    @PostMapping("/addPraticien")
-    public String addPraticien() {
+    @PostMapping("/addPraticien/{id}")
+    public String addPraticien(@PathVariable String id) {
         return "Praticien added";
     }
 
@@ -24,6 +24,4 @@ public class PraticienServiceController {
     public String updatePraticien() {
         return "Praticien updated";
     }
-
-
 }

@@ -1,14 +1,13 @@
-package com.example.patient_service;
+package com.example.eureka_server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class PatientServiceApplication {
+public class EurekaServerApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PatientServiceApplication.class, args);
+        SpringApplication.run(EurekaServerApplication.class, args);
     }
 
 }

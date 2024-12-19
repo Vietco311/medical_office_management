@@ -1,14 +1,13 @@
-package com.example.patient_service;
+package com.example.gateway;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
 @SpringBootApplication
-public class PatientServiceApplication {
+public class GatewayApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(PatientServiceApplication.class, args);
+        SpringApplication.run(GatewayApplication.class, args);
     }
 
 }
