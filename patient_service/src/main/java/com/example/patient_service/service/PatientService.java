@@ -4,10 +4,7 @@ import com.example.patient_service.database.DatabaseConnection;
 import com.example.patient_service.model.Patient;
 import org.springframework.stereotype.Service;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,5 +95,19 @@ public class PatientService {
         }
     }
 
+    public void prendreRdv(int idPatient, int idPraticien, Date date) {
+        String updateSQL = "INSERT INTO rdv (idPatient, idPracticien, date) VALUES (?, ?, ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+
+            pstmt.setInt(1, idPatient);
+            pstmt.setInt(2, idPraticien);
+            pstmt.setDate(3, date);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
